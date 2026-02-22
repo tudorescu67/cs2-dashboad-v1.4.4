@@ -1,0 +1,10 @@
+{
+  "name": "cs2-rcon-dashboard",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node api/command.js"
+  },
+  "dependencies": {
+    "rcon-client": "^4.2.3"
+  }
+}
