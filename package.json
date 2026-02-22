@@ -1,5 +1,5 @@
 {
-  "name": "cs2-rcon-dashboard",
+  "name": "cs2-dashboard",
   "version": "1.0.0",
   "scripts": {
     "start": "node api/command.js"
