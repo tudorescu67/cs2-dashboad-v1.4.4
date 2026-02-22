@@ -22,7 +22,7 @@
         <div class="card">
             <h3>🔌 Connection Details</h3>
             <input type="text" id="host" placeholder="Server IP (e.g. 123.45.67.89)">
-            <input type="number" id="port" placeholder="Port (e.g. 27015)" value="27015">
+            <input type="number" id="port" placeholder="Port (e.g. 21043)" value="21043">
             <input type="password" id="password" placeholder="RCON Password">
         </div>
 
@@ -67,12 +67,22 @@
             document.getElementById('cmd').value = '';
 
             try {
-                const res = await fetch('/api/command', {
+                // Use full URL to avoid relative path issues if deployed in subdir or behind proxy
+                const apiUrl = window.location.origin + '/api/command';
+                
+                const res = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ host, port, password, command })
                 });
                 
+                // Check if response is actually JSON before parsing
+                const contentType = res.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    const text = await res.text();
+                    throw new Error(`Server returned non-JSON response: ${text.substring(0, 100)}...`);
+                }
+
                 const data = await res.json();
                 if(data.success) {
                     log(data.response);
